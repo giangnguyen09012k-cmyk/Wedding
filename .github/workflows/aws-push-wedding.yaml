@@ -27,4 +27,4 @@ jobs:
 
       - name: Push to Bucket
         run: |
-          aws s3 sync . ${{ vars.BUCKET_PATH }} --delete
+          aws s3 sync . ${{ vars.BUCKET_WEDDING }} --delete
