@@ -23,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.IAM_ROLE }}
-          aws-region: ${{ vars.MAIN_REGION }}
+          aws-region: us-east-1
 
       - name: Push to Bucket
         run: |
