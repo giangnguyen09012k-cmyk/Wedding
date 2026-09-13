@@ -6601,6 +6601,75 @@
         run();
       })();
     </script>
+    <script>
+      (function() {
+        var API_URL = "https://20n3mk8xxh.execute-api.us-east-1.amazonaws.com/submit";
+
+        function waitForForm() {
+          var form = document.querySelector("#FORM2 form.ladi-form");
+          if (!form) { setTimeout(waitForForm, 500); return; }
+
+          var submitBtn = document.querySelector("#BUTTON2");
+          if (submitBtn) {
+            submitBtn.addEventListener("click", function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit(form);
+            });
+          }
+
+          form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSubmit(form);
+          }, true);
+        }
+
+        function handleSubmit(form) {
+          var name = form.querySelector("input[name='name']");
+          var message = form.querySelector("textarea[name='message']");
+          var attending = form.querySelector("select[name='form_item7']");
+          var invitedBy = form.querySelector("select[name='form_item9']");
+          var guests = form.querySelector("input[placeholder='Số lượng tham dự cùng?']");
+
+          if (!name || !name.value.trim()) {
+            alert("Vui lòng nhập tên của bạn!");
+            return;
+          }
+
+          var btn = document.querySelector("#BUTTON2 .ladi-button");
+          if (btn) { btn.style.opacity = "0.6"; btn.style.pointerEvents = "none"; }
+
+          fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name ? name.value.trim() : "",
+              message: message ? message.value.trim() : "",
+              attending: attending ? attending.value : "",
+              invitedBy: invitedBy ? invitedBy.value : "",
+              guests: guests ? guests.value.trim() : ""
+            })
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data.success) {
+              alert("Cảm ơn bạn đã xác nhận tham dự! Chúng mình rất vui được đón tiếp bạn 💌");
+              form.reset();
+            }
+          })
+          .catch(function(err) {
+            alert("Có lỗi xảy ra, vui lòng thử lại!");
+            console.error(err);
+          })
+          .finally(function() {
+            if (btn) { btn.style.opacity = ""; btn.style.pointerEvents = ""; }
+          });
+        }
+
+        waitForForm();
+      })();
+    </script>
   </body>
 </html>
 <!--Publish time: Sun, 02 Aug 2026 06:19:57 GMT--><!--LadiPage build time: Sun, 02 Aug 2026 03:35:32 GMT-->
