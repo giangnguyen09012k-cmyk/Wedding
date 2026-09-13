@@ -25,17 +25,6 @@ jobs:
           role-to-assume: ${{ secrets.IAM_ROLE }}
           aws-region: ${{ vars.MAIN_REGION }}
 
-      - name: Check AWS identity
-        run: |
-          aws sts get-caller-identity
-
-      - name: Clear old files in Bucket
-        run: |
-          aws s3 rm ${{ vars.BUCKET_WEDDING }} --recursive \
-            --exclude "jmiiwedding.com/*" \
-            --exclude "w.ladicdn.com/*" \
-            --exclude "w.ladicdn.com_443/*"
-
       - name: Push to Bucket
         run: |
           aws s3 sync ./jmiiwedding.com ${{ vars.BUCKET_WEDDING }}/jmiiwedding.com --delete
