@@ -13,6 +13,7 @@ jobs:
   push-to-bucket:
     name: Push to Bucket on AWS
     runs-on: ubuntu-latest
+    environment: aws-gg
 
     steps:
       - name: Checkout code
@@ -21,8 +22,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::423427814705:role/github-actions-repo
-          aws-region: us-east-1
+          role-to-assume: ${{ secrets.IAM_ROLE }}
+          aws-region: ${{ secrets.MAIN_REGION }}
 
       - name: Check AWS identity
         run: |
@@ -30,4 +31,4 @@ jobs:
 
       - name: Push to Bucket
         run: |
-          aws s3 sync . s3://wedding-monte --delete
+          aws s3 sync . ${{ secrets.BUCKET_WEDDING }} --delete
