@@ -38,3 +38,8 @@ jobs:
       - name: Push to Bucket
         run: |
           aws s3 sync . ${{ vars.BUCKET_WEDDING }} --delete
+      - name: Invalidate CloudFront # ~ Reset web
+        run: |
+          aws cloudfront create-invalidation \
+          --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
+          --paths "/*"
