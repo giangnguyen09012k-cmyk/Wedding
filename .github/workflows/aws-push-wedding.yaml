@@ -31,6 +31,7 @@ jobs:
           aws s3 sync ./w.ladicdn.com ${{ vars.BUCKET_WEDDING }}/w.ladicdn.com --delete
           aws s3 sync ./w.ladicdn.com_443 ${{ vars.BUCKET_WEDDING }}/w.ladicdn.com_443 --delete
           aws s3 sync ./cdn ${{ vars.BUCKET_WEDDING }}/cdn --delete
+          aws s3 sync ./assets ${{ vars.BUCKET_WEDDING }}/assets --delete
 
       - name: Invalidate CloudFront
         run: |
