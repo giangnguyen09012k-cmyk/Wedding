@@ -4662,6 +4662,11 @@
 
       let musicStarted = false;
       let isPlaying = false;
+      let userMuted = false;
+      window.tryAutoMusic = function () {
+        if (userMuted || isPlaying) return;
+        safePlay().catch(function () {});
+      };
 
       const toggleBtn = document.getElementById("music-toggle");
       const iconOn = document.getElementById("icon-on");
@@ -4721,8 +4726,9 @@
       // -------------------
       // Start music on first gesture (iOS + Desktop)
       // -------------------
-      function startMusicOnFirstGesture() {
-        if (musicStarted) return;
+      function startMusicOnFirstGesture(ev) {
+        if (musicStarted || userMuted) return;
+        if (ev && ev.target && ev.target.closest && ev.target.closest("#music-toggle")) return;
         safePlay().catch(() => {});
       }
 
@@ -4744,6 +4750,7 @@
       // -------------------
       toggleBtn.addEventListener("click", function (ev) {
         ev.preventDefault();
+        if (!isPlaying) userMuted = false;
 
         if (!musicStarted) {
           safePlay().catch(() => {
@@ -4754,6 +4761,7 @@
         }
 
         if (isPlaying) {
+          userMuted = true;
           pauseMusic();
         } else {
           safePlay().catch(() => {
@@ -5564,6 +5572,23 @@
           </div>
         </div>
       </div>
+      <div id="SECTION_TIECGIA" class="ladi-section" style="height: 160px">
+        <div class="ladi-section-background"></div>
+        <div class="ladi-container">
+          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden">
+            <div
+              style="position: absolute; width: 100%; height: 100%; background-image: url('/cdn/s750x950/6322a62f2dad980013bb5005/thiep-thanh-dat-element_0033_1-20251010160355-v6bgi.png'); background-size: cover; background-position: center top"
+            ></div>
+          </div>
+          <div style="position: relative; padding-top: 36px; text-align: center; font-family: 'TESQSSRUdVTEFSLlRURg', serif; color: rgb(82, 97, 62)">
+            <p style="font-size: 34px; font-weight: bold; line-height: 1.4; text-transform: uppercase; letter-spacing: 1px">Tiệc tại gia</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 28px; margin-top: 12px; font-size: 16px; font-weight: bold; line-height: 1.6; text-transform: uppercase; white-space: nowrap">
+              <span>Thứ bảy</span><span>|</span><span>10.10.2026</span><span>|</span><span>17 giờ 00</span>
+            </div>
+            <p style="font-size: 13px; font-style: italic; line-height: 1.6; margin-top: 8px">(Tức Ngày 01 Tháng 09 Bính Ngọ)</p>
+          </div>
+        </div>
+      </div>
       <div id="SECTION8" class="ladi-section">
         <div class="ladi-section-background"></div>
         <div class="ladi-container">
@@ -5879,7 +5904,7 @@
         </div>
       </div>
 
-      <div id="SECTION_GIFT" class="ladi-section" style="height: 380px">
+      <div id="SECTION_GIFT" class="ladi-section" style="height: 363px">
         <div class="ladi-section-background"></div>
         <div class="ladi-container">
           <div
@@ -5941,98 +5966,14 @@
                 onclick="showQR('chure')"
                 style="width: 175px; cursor: pointer"
               >
-                <div
-                  class="blink-giftbox"
-                  style="
-                    width: 175px;
-                    height: 260px;
-                    background: #52613e;
-                    border-radius: 12px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                  "
-                >
-                  <div
-                    style="
-                      width: 70px;
-                      height: 70px;
-                      border: 2px solid #c4a44a;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      margin-bottom: 12px;
-                    "
-                  >
-                    <span
-                      style="font-size: 42px; color: #c4a44a; font-weight: bold"
-                      >&#22218;</span
-                    >
-                  </div>
-                  <span
-                    style="
-                      color: #fff;
-                      font-size: 20px;
-                      font-family: &quot;TESQSSRUdVTEFSLlRURg&quot;, serif;
-                      font-weight: bold;
-                    "
-                    >Chú Rể</span
-                  >
-                  <span style="color: #c4a44a; font-size: 15px; margin-top: 2px"
-                    >Nhấn để mở</span
-                  >
-                </div>
+                <img class="blink-giftbox" src="/bao-li-xi.png" alt="Bao lì xì" style="width: 175px; height: auto; display: block" /><span style="display: block; text-align: center; margin-top: 0px; color: #52613e; font-size: 20px; font-weight: bold; line-height: 1.4; font-family: 'TESQSSRUdVTEFSLlRURg', serif;">Chú Rể</span><span style="display: block; text-align: center; margin-top: 2px; color: #52613e; font-size: 14px; font-family: 'TESQSSRUdVTEFSLlRURg', serif;">Nhấn để mở</span>
               </div>
               <!-- Co Dau -->
               <div
                 onclick="showQR('codau')"
                 style="width: 175px; cursor: pointer"
               >
-                <div
-                  class="blink-giftbox"
-                  style="
-                    width: 175px;
-                    height: 260px;
-                    background: #52613e;
-                    border-radius: 12px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                  "
-                >
-                  <div
-                    style="
-                      width: 70px;
-                      height: 70px;
-                      border: 2px solid #c4a44a;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      margin-bottom: 12px;
-                    "
-                  >
-                    <span
-                      style="font-size: 42px; color: #c4a44a; font-weight: bold"
-                      >&#22218;</span
-                    >
-                  </div>
-                  <span
-                    style="
-                      color: #fff;
-                      font-size: 20px;
-                      font-family: &quot;TESQSSRUdVTEFSLlRURg&quot;, serif;
-                      font-weight: bold;
-                    "
-                    >Cô Dâu</span
-                  >
-                  <span style="color: #c4a44a; font-size: 15px; margin-top: 2px"
-                    >Nhấn để mở</span
-                  >
-                </div>
+                <img class="blink-giftbox" src="/bao-li-xi.png" alt="Bao lì xì" style="width: 175px; height: auto; display: block" /><span style="display: block; text-align: center; margin-top: 0px; color: #52613e; font-size: 20px; font-weight: bold; line-height: 1.4; font-family: 'TESQSSRUdVTEFSLlRURg', serif;">Cô Dâu</span><span style="display: block; text-align: center; margin-top: 2px; color: #52613e; font-size: 14px; font-family: 'TESQSSRUdVTEFSLlRURg', serif;">Nhấn để mở</span>
               </div>
             </div>
           </div>
@@ -7065,7 +7006,7 @@
             }
           ]
         },
-        "GALLERY2": { "a": "gallery", "ah": true, "ae": 5 }
+        "GALLERY2": { "a": "gallery", "ah": false, "ae": 5 }
       }
     </script>
     <script id="script_ladipage_run" type="text/javascript">
@@ -7303,6 +7244,301 @@
         }
 
         waitForForm();
+      })();
+    </script>
+  
+    <!-- AUTO SCROLL -->
+    <script>
+      (function () {
+        var SPEED = 40; // px moi giay
+        var START_DELAY = 2000; // ms cho sau khi tai xong
+        var RESUME_DELAY = 3000; // ms khach ngung cham roi moi cuon tiep
+        var GALLERY_RESUME = 5000; // ms cho sau khi khach bam < >
+        var SLIDE_MS = 3000; // ms moi anh hien
+        var GALLERY_TAIL = 3000; // ms doi sau khi quay ve anh dau
+        var STABLE_TICKS = 4; // so lan kiem tra (300ms) khung hinh dung yen
+        var nextDelay = RESUME_DELAY;
+        var running = false, touching = false;
+        var pos = 0, last = 0, lastY = 0, raf = null, timer = null;
+        var galleryDone = false, galleryHolding = false, galleryFinished = false;
+        var gWatch = null, gTimer = null, easeRaf = null;
+        var pauseUntil = 0, aEase = null;
+
+        function busy() {
+          var a = document.activeElement;
+          if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return true;
+          var q = document.getElementById("qr-overlay");
+          if (q && q.classList.contains("show")) return true;
+          var p = document.getElementById("custom-popup-overlay");
+          if (p && p.classList.contains("show")) return true;
+          return false;
+        }
+        function maxScroll() {
+          return document.documentElement.scrollHeight - window.innerHeight;
+        }
+
+        // ---------- Slide anh ----------
+        function galTotal() {
+          return document.querySelectorAll("#GALLERY2 .ladi-gallery-view-item").length;
+        }
+        function curIdx() {
+          var it = document.querySelectorAll("#GALLERY2 .ladi-gallery-view-item");
+          for (var i = 0; i < it.length; i++) {
+            if (it[i].classList.contains("selected")) {
+              return parseInt(it[i].getAttribute("data-index"), 10);
+            }
+          }
+          return -1;
+        }
+        function goTo(i) {
+          var c = document.querySelector('#GALLERY2 .ladi-gallery-control-item[data-index="' + i + '"]');
+          if (c) c.click(); // click gia lap (isTrusted = false) nen khong bi tinh la khach
+        }
+        function goNext() {
+          var nx = document.querySelector("#GALLERY2 .ladi-gallery-view-arrow-right");
+          if (nx) nx.click();
+        }
+        function endGalleryHold() {
+          galleryHolding = false;
+          galleryDone = true;
+          clearInterval(gWatch);
+          clearTimeout(gTimer);
+          if (easeRaf) cancelAnimationFrame(easeRaf);
+        }
+        function finishGallery() {
+          if (!galleryHolding) return;
+          endGalleryHold();
+          galleryFinished = true;
+          tryResume();
+        }
+        // Slide ra khoi man hinh -> lan sau cuon toi se chieu lai tu dau
+        function resetGalleryIfOut() {
+          if (galleryFinished || !galleryDone || galleryHolding) return;
+          var g = document.getElementById("GALLERY2");
+          if (!g) return;
+          var r = g.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > window.innerHeight) galleryDone = false;
+        }
+        function easeTo(targetY, done) {
+          var from = window.pageYOffset;
+          var dist = targetY - from;
+          if (Math.abs(dist) < 2) { done(); return; }
+          var dur = Math.min(900, 300 + Math.abs(dist) * 2);
+          var t0 = null;
+          function f(ts) {
+            if (!galleryHolding) return;
+            if (!t0) t0 = ts;
+            var p = Math.min(1, (ts - t0) / dur);
+            var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+            window.scrollTo(0, from + dist * e);
+            lastY = window.pageYOffset;
+            if (p < 1) easeRaf = requestAnimationFrame(f); else done();
+          }
+          easeRaf = requestAnimationFrame(f);
+        }
+        function beginSlides() {
+          var lastAdvance = Date.now();
+          gWatch = setInterval(function () {
+            if (!galleryHolding) return;
+            if (Date.now() - lastAdvance < SLIDE_MS) return;
+            lastAdvance = Date.now();
+            var i = curIdx();
+            if (i >= 0 && i < galTotal() - 1) {
+              goNext();
+            } else {
+              // anh cuoi da hien du lau: quay ve anh dau, doi 3 giay roi cuon tiep
+              clearInterval(gWatch);
+              goNext(); // sang anh dau theo huong phai -> trai
+              setTimeout(function () {
+                if (galleryHolding && curIdx() !== 0) goTo(0); // du phong
+              }, 800);
+              gTimer = setTimeout(finishGallery, GALLERY_TAIL);
+            }
+          }, 300);
+        }
+        function waitStable() {
+          var prev = window.pageYOffset, ticks = 0;
+          gWatch = setInterval(function () {
+            if (!galleryHolding) return;
+            var y = window.pageYOffset;
+            if (Math.abs(y - prev) < 1) ticks++; else ticks = 0;
+            prev = y;
+            if (ticks >= STABLE_TICKS) {
+              clearInterval(gWatch);
+              beginSlides();
+            }
+          }, 300);
+        }
+        function startGalleryHold(r, target) {
+          galleryHolding = true;
+          stop();
+          var y = Math.max(0, Math.min(maxScroll(), window.pageYOffset + (r.top - target)));
+          easeTo(y, waitStable);
+        }
+        function checkGallery() {
+          if (galleryFinished || galleryDone || galleryHolding) return false;
+          var g = document.getElementById("GALLERY2");
+          if (!g) { galleryDone = true; return false; }
+          var r = g.getBoundingClientRect();
+          var target = Math.max(0, (window.innerHeight - r.height) / 2);
+          // da toi (hoac vuot qua) vi tri giua man hinh va slide con hien ro
+          if (r.top <= target && r.bottom > window.innerHeight * 0.3) {
+            startGalleryHold(r, target);
+            return true;
+          }
+          return false;
+        }
+
+        // ---------- Tu cuon ----------
+        function step(t) {
+          if (!running) return;
+          if (Date.now() < pauseUntil) {
+            last = 0;
+            pos = window.pageYOffset;
+            lastY = pos;
+            raf = requestAnimationFrame(step);
+            return;
+          }
+          if (!last) last = t;
+          var dt = (t - last) / 1000;
+          last = t;
+          pos += SPEED * dt;
+          var max = maxScroll();
+          if (pos >= max) {
+            window.scrollTo(0, max);
+            running = false;
+            return;
+          }
+          resetGalleryIfOut();
+          if (checkGallery()) return;
+          window.scrollTo(0, pos);
+          lastY = window.pageYOffset;
+          raf = requestAnimationFrame(step);
+        }
+        function start() {
+          if (running || galleryHolding) return;
+          nextDelay = RESUME_DELAY;
+          pos = window.pageYOffset || document.documentElement.scrollTop || 0;
+          lastY = pos;
+          last = 0;
+          running = true;
+          raf = requestAnimationFrame(step);
+        }
+        function stop() {
+          running = false;
+          if (aEase) cancelAnimationFrame(aEase);
+          pauseUntil = 0;
+          if (raf) cancelAnimationFrame(raf);
+        }
+        function tryResume() {
+          if (touching || galleryHolding) return;
+          if (busy()) {
+            timer = setTimeout(tryResume, RESUME_DELAY);
+            return;
+          }
+          start();
+        }
+        function userActive(hold) {
+          if (galleryHolding) endGalleryHold(); // khach tu dieu khien: khong cho slide nua
+          stop();
+          clearTimeout(timer);
+          if (!hold) timer = setTimeout(tryResume, nextDelay);
+        }
+
+        // Khach cham/bam vao trong slide (< > , vuot, anh nho): doi 5 giay roi cuon tiep
+        function onGalleryUser(e) {
+          if (!e.isTrusted) return;
+          var g = document.getElementById("GALLERY2");
+          if (!g || !g.contains(e.target)) return;
+          nextDelay = GALLERY_RESUME;
+          endGalleryHold();
+          if (e.type === "click") {
+            stop();
+            clearTimeout(timer);
+            if (!touching) timer = setTimeout(tryResume, GALLERY_RESUME);
+          }
+        }
+        // ---------- Hieu ung (LadiPage) ----------
+        function toMs(s) {
+          s = (s || "").trim();
+          var v = parseFloat(s) || 0;
+          return s.indexOf("ms") > -1 ? v : v * 1000;
+        }
+        function animMs(el) {
+          var m = 0, list = [el], c = el.firstElementChild;
+          if (c) { list.push(c); if (c.firstElementChild) list.push(c.firstElementChild); }
+          list.forEach(function (n) {
+            var cs = getComputedStyle(n);
+            var v = toMs(cs.animationDuration.split(",")[0]) + toMs(cs.animationDelay.split(",")[0]);
+            if (v > m) m = v;
+          });
+          return m;
+        }
+        function onAnimStart(el) {
+          var H = window.innerHeight, want = H * 0.6;
+          var r = el.getBoundingClientRect();
+          var dy = Math.min(r.top - want, H * 0.45, maxScroll() - window.pageYOffset);
+          if (dy < 20) return;
+          var dur = 900;
+          pauseUntil = Date.now() + Math.min(2800, Math.max(dur, animMs(el)) + 300);
+          var from = window.pageYOffset, t0 = null;
+          function f(ts) {
+            if (!running || galleryHolding) return;
+            if (!t0) t0 = ts;
+            var p = Math.min(1, (ts - t0) / dur);
+            var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+            window.scrollTo(0, from + dy * e);
+            lastY = window.pageYOffset;
+            if (p < 1) aEase = requestAnimationFrame(f);
+          }
+          aEase = requestAnimationFrame(f);
+        }
+        if (window.MutationObserver) {
+          new MutationObserver(function (ms) {
+            if (!running || galleryHolding || Date.now() < pauseUntil) return;
+            var H = window.innerHeight, best = null, bestTop = 1e9;
+            ms.forEach(function (m) {
+              var el = m.target;
+              if ((m.oldValue || "").indexOf("ladi-animation-hidden") === -1) return;
+              if (el.classList.contains("ladi-animation-hidden")) return;
+              var t = el.getBoundingClientRect().top;
+              if (t >= H * 0.6 && t <= H && t < bestTop) { best = el; bestTop = t; }
+            });
+            if (best) onAnimStart(best);
+          }).observe(document.body, {
+            attributes: true,
+            attributeFilter: ["class"],
+            attributeOldValue: true,
+            subtree: true
+          });
+        }
+
+        var capOpt = { capture: true, passive: true };
+        document.addEventListener("touchstart", onGalleryUser, capOpt);
+        document.addEventListener("mousedown", onGalleryUser, capOpt);
+        document.addEventListener("click", onGalleryUser, true);
+
+        var opt = { passive: true };
+        window.addEventListener("touchstart", function () { touching = true; userActive(true); }, opt);
+        window.addEventListener("touchend", function () { touching = false; userActive(false); }, opt);
+        window.addEventListener("touchcancel", function () { touching = false; userActive(false); }, opt);
+        window.addEventListener("wheel", function () { userActive(false); }, opt);
+        window.addEventListener("mousedown", function () { userActive(false); }, opt);
+        window.addEventListener("keydown", function () { userActive(false); }, opt);
+        window.addEventListener("scroll", function () {
+          resetGalleryIfOut();
+          if (Math.abs(window.pageYOffset - lastY) > 2) {
+            lastY = window.pageYOffset;
+            userActive(touching);
+          }
+        }, opt);
+
+        window.addEventListener("load", function () {
+          timer = setTimeout(function () {
+            if (window.tryAutoMusic) window.tryAutoMusic();
+            tryResume();
+          }, START_DELAY);
+        });
       })();
     </script>
   </body>
