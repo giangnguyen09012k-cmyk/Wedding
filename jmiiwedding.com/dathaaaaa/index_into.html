@@ -4671,6 +4671,27 @@
         updateIcon();
       }
 
+      // -------------------
+      // Tat nhac khi trang bi an di (dong webview Messenger/Zalo,
+      // chuyen app, khoa man hinh...) de tranh nhac van keu ngam
+      // -------------------
+      let wasPlayingBeforeHide = false;
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          wasPlayingBeforeHide = isPlaying;
+          if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            updateIcon();
+          }
+        } else if (wasPlayingBeforeHide && !userMuted) {
+          safePlay().catch(function () {});
+        }
+      });
+      window.addEventListener("pagehide", function () {
+        audio.pause();
+      });
+
       audio.addEventListener("ended", function () {
         index = (index + 1) % musicList.length;
         audio.src = musicList[index];
