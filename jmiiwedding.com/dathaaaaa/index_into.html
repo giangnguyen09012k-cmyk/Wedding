@@ -7422,59 +7422,9 @@
           }
         }
         // ---------- Hieu ung (LadiPage) ----------
-        function toMs(s) {
-          s = (s || "").trim();
-          var v = parseFloat(s) || 0;
-          return s.indexOf("ms") > -1 ? v : v * 1000;
-        }
-        function animMs(el) {
-          var m = 0, list = [el], c = el.firstElementChild;
-          if (c) { list.push(c); if (c.firstElementChild) list.push(c.firstElementChild); }
-          list.forEach(function (n) {
-            var cs = getComputedStyle(n);
-            var v = toMs(cs.animationDuration.split(",")[0]) + toMs(cs.animationDelay.split(",")[0]);
-            if (v > m) m = v;
-          });
-          return m;
-        }
-        function onAnimStart(el) {
-          var H = window.innerHeight, want = H * 0.6;
-          var r = el.getBoundingClientRect();
-          var dy = Math.min(r.top - want, H * 0.45, maxScroll() - window.pageYOffset);
-          if (dy < 20) return;
-          var dur = 900;
-          pauseUntil = Date.now() + Math.min(2800, Math.max(dur, animMs(el)) + 300);
-          var from = window.pageYOffset, t0 = null;
-          function f(ts) {
-            if (!running || galleryHolding) return;
-            if (!t0) t0 = ts;
-            var p = Math.min(1, (ts - t0) / dur);
-            var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-            window.scrollTo(0, from + dy * e);
-            lastY = window.pageYOffset;
-            if (p < 1) aEase = requestAnimationFrame(f);
-          }
-          aEase = requestAnimationFrame(f);
-        }
-        if (window.MutationObserver) {
-          new MutationObserver(function (ms) {
-            if (!running || galleryHolding || Date.now() < pauseUntil) return;
-            var H = window.innerHeight, best = null, bestTop = 1e9;
-            ms.forEach(function (m) {
-              var el = m.target;
-              if ((m.oldValue || "").indexOf("ladi-animation-hidden") === -1) return;
-              if (el.classList.contains("ladi-animation-hidden")) return;
-              var t = el.getBoundingClientRect().top;
-              if (t >= H * 0.6 && t <= H && t < bestTop) { best = el; bestTop = t; }
-            });
-            if (best) onAnimStart(best);
-          }).observe(document.body, {
-            attributes: true,
-            attributeFilter: ["class"],
-            attributeOldValue: true,
-            subtree: true
-          });
-        }
+        // Da bo co che tam dung/tang toc cuon khi phan tu co hieu ung xuat hien,
+        // vi no lam cuon bi giat (tang/giam toc dot ngot). Gio cuon giu toc do
+        // deu (SPEED) tu dau den cuoi, giong nhu vuot tay.
 
         var capOpt = { capture: true, passive: true };
         document.addEventListener("touchstart", onGalleryUser, capOpt);
